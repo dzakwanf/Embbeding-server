@@ -60,7 +60,7 @@ python test_embbding.py
 
 ```bash
 curl -X 'POST' \
-  'http://34.71.137.98:8001/v1/embeddings' \
+  'http://IP_ADDRESS:8001/v1/embeddings' \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -d '{
@@ -73,7 +73,7 @@ curl -X 'POST' \
 
 ```bash
 curl -X 'POST' \
-  'http://34.71.137.98:8002/v1/embeddings' \
+  'http://IP_ADDRESS:8002/v1/embeddings' \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -d '{
@@ -87,7 +87,7 @@ curl -X 'POST' \
 
 ```bash
 curl -X 'POST' \
-  'http://34.71.137.98:8003/v1/embeddings' \
+  'http://IP_ADDRESS:8003/v1/embeddings' \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -d '{
