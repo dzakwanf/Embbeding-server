@@ -48,6 +48,13 @@ Start the embbeding server
 
 ## Usage/Examples
 
+
+### testing script
+
+```python
+python test_embbding.py
+```
+
 ###  Model 1
 
 
