@@ -53,12 +53,12 @@ Start the embbeding server
 
 ```bash
 curl -X 'POST' \
-  'http://localhost:8001/v1/embeddings' \
+  'http://34.71.137.98:8001/v1/embeddings' \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -d '{
   "input": "substratus.ai provides the best LLM tools",
-  "model": "all-mpnet-base-v2"
+  "model": "multi-qa-mpnet-base-dot-v1"
 }'
 ```
 
@@ -66,12 +66,12 @@ curl -X 'POST' \
 
 ```bash
 curl -X 'POST' \
-  'http://localhost:8002/v1/embeddings' \
+  'http://34.71.137.98:8002/v1/embeddings' \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -d '{
   "input": "substratus.ai provides the best LLM tools",
-  "model": "all-mpnet-base-v2"
+  "model": "all-MiniLM-L12-v2"
 }'
 ```
 
@@ -80,12 +80,12 @@ curl -X 'POST' \
 
 ```bash
 curl -X 'POST' \
-  'http://localhost:8003/v1/embeddings' \
+  'http://34.71.137.98:8003/v1/embeddings' \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -d '{
   "input": "substratus.ai provides the best LLM tools",
-  "model": "all-mpnet-base-v2"
+  "model": "gtr-t5-large"
 }'
 ```
 
@@ -95,18 +95,52 @@ curl -X 'POST' \
 ```python
 from langchain_community.embeddings import LocalAIEmbeddings
 
-embeddings = LocalAIEmbeddings(
-    openai_api_base="http://localhost:8001/v1", model="multi-qa-mpnet-base-dot-v", openai_api_key"custom"
+def embbeding_model(embeddings,text):
 
-text = "This is a test document."
+    if embeddings == "multiqa":
+        embd = LocalAIEmbeddings(
+                openai_api_base="http://IP_ADDRESS:8000/v1", model="multi-qa-mpnet-base-dot-v", 
+                openai_api_key"sk-"
+            )
+    elif embeddings == "allmini_l12":
+        embd = LocalAIEmbeddings(
+                openai_api_base="http://IP_ADRESS:8002/v1", model="all-MiniLM-L12-v2", 
+                openai_api_key"sk-"
+            )
+    elif embeddings == "gtr":
+        embd = LocalAIEmbeddings(
+                openai_api_base="http://IP_ADDRESS:8003/v1", 
+                model="gtr-t5-large", 
+                openai_api_key"sk-"
+            )
+    else: 
+        print(embedding eror)
 
-query_result = embeddings.embed_query(text)
 
-print(query_result)
+    text = text
+    query_result = embd.embed_query(text)
+    print(query_result)
+
+
+# Example model 1
+embbeding_model(
+    embeddings"multiqa",
+    text="Hallo testing model 1"
 )
 
 
+#Example model 2
+embbeding_model(
+    embeddings"allmini_l12",
+    text="Hallo testing model 2"
+)
 
+
+# Example model 3
+embbeding_model(
+    embeddings"gtr",
+    text="Hallo testing model 3"
+)
 
 ```
 
