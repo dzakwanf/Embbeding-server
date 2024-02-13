@@ -7,7 +7,7 @@ from pydantic import BaseModel, Field
 from sentence_transformers import SentenceTransformer
 
 models: Dict[str, SentenceTransformer] = {}
-model_name = os.getenv("MODEL", "multi-qa-mpnet-base-dot-v1 ")
+model_name = os.getenv("MODEL", "multi-qa-mpnet-base-dot-v1")
 
 
 class EmbeddingRequest(BaseModel):
