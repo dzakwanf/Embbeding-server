@@ -2,21 +2,21 @@ version: '3'
 services:
   model_1:
     build:
-      context: ./model_1
+      context: model_1
     image: model_1
     container_name: model_1
     ports:
       - "8001:8080"
   model_2:
     build:
-      context: ./model_2
+      context: model_1
     image: model_2
     container_name: model_2
     ports:
       - "8002:8080"
   model_3:
     build:
-      context: ./model_3
+      context: model_1
     image: model_3
     container_name: model_3
     ports:
