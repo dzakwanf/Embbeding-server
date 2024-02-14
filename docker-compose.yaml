@@ -31,3 +31,13 @@ services:
     environment:
       - DOCKER_BUILDKIT=1
 
+
+  model_4:
+    build:
+      context: model_4
+    image: model_4
+    container_name: model_4
+    ports:
+      - "8004:8080"
+    environment:
+      - DOCKER_BUILDKIT=1

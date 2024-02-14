@@ -15,7 +15,7 @@ Clone the project
 Go to the project directory
 
 ```bash
-  cd Embbeding Model
+  cd Embbeding-server
 ```
 
 Build docker images 
