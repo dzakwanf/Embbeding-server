@@ -3,7 +3,6 @@ from contextlib import asynccontextmanager
 import os
 import asyncio
 
-
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
 from sentence_transformers import SentenceTransformer
@@ -40,20 +39,25 @@ class EmbeddingResponse(BaseModel):
     object: str
 
 
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    models[model_name] = SentenceTransformer(model_name, device="cuda")
-    yield
+async def load_model():
+    models[model_name] = SentenceTransformer(model_name)
 
 
-app = FastAPI(lifespan=lifespan)
+async def initialize_models():
+    await asyncio.gather(load_model())  # Add more models if needed
+
+
+app = FastAPI()
+
+
+@app.on_event("startup")
+async def startup_event():
+    await initialize_models()
 
 
 @app.post("/v1/embeddings")
 async def embedding(item: EmbeddingRequest) -> EmbeddingResponse:
-    
     model: SentenceTransformer = models[model_name]
-    
     if isinstance(item.input, str):
         vectors = model.encode(item.input)
         tokens = len(vectors)
@@ -63,44 +67,30 @@ async def embedding(item: EmbeddingRequest) -> EmbeddingResponse:
             usage=Usage(prompt_tokens=tokens, total_tokens=tokens),
             object="list",
         )
-    
     if isinstance(item.input, list):
-        
         embeddings = []
         tokens = 0
-        batch = [] 
-        
+        tasks = []
         for index, text_input in enumerate(item.input):
             if not isinstance(text_input, str):
                 raise HTTPException(
                     status_code=400,
                     detail="input needs to be an array of strings or a string",
                 )
-            
-            # Add Batch processing 
-            batch = asyncio.create_task(model.encode(text_input))
-            batch.append(batch)
-            results = await asyncio.gather(*batch)
-
-            for index, vectors in enumerate(results):
-                tokens += len(vectors)
-                embeddings.append(
-                    EmbeddingData(embedding=vectors, index=index, object="embedding")
-                )
-
-            # vectors = model.encode(text_input)
-            #tokens += len(vectors)
-            #embeddings.append(
-            #    EmbeddingData(embedding=vectors, index=index, object="embedding")
-            #)
-        
+            task = asyncio.create_task(model.encode(text_input))
+            tasks.append(task)
+        results = await asyncio.gather(*tasks)
+        for index, vectors in enumerate(results):
+            tokens += len(vectors)
+            embeddings.append(
+                EmbeddingData(embedding=vectors, index=index, object="embedding")
+            )
         return EmbeddingResponse(
             data=embeddings,
             model=model_name,
             usage=Usage(prompt_tokens=tokens, total_tokens=tokens),
             object="list",
         )
-    
     raise HTTPException(
         status_code=400, detail="input needs to be an array of strings or a string"
     )

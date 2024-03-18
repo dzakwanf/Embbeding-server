@@ -2,7 +2,7 @@ FROM nvidia/cuda:12.2.2-runtime-ubuntu22.04
 
 
 ENV DEBIAN_FRONTEND=noninteractive
-ENV PORT=8080
+ENV PORT=8000
 
 RUN --mount=target=/var/lib/apt/lists,type=cache,sharing=locked \
     --mount=target=/var/cache/apt,type=cache,sharing=locked \
